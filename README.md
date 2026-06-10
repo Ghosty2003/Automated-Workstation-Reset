@@ -9,7 +9,7 @@ A bimanual SO-101 robotic system that detects loose tools on a makerspace workst
 
 ## Demo
 
-[Video demo — Google Drive link to be added](#)
+[Video demo (Google Drive)](https://drive.google.com/file/d/1P-MaJwvtjiz7tykhHInCEGyTo5pyPn6b/view?usp=drive_link)
 
 Five tool types handled: **screwdriver, plier, tape, pen, scissor**. Two SO-101 arms split the workspace left/right; perception runs YOLOv8m on a RealSense D435 stream; planning combines MoveIt IK with per-arm Rosetta policy clients (ACT-trained) for the grasp; placement is per-tool MoveIt trajectory to the matching rack slot.
 
@@ -34,47 +34,64 @@ Grasping priority (set in `bi_grasp_pipeline.launch.py`, override with `left_seq
 ## Quantitative results
 
 **Evaluation methodology**
-- **Success (binary):** object correctly placed in the designated bin and the full pipeline completes. Fail = wrong box, dropped, or timeout (>60 s).
-- **3 conditions × 10 trials = 30+ runs**
+- **Success (binary):** object correctly placed in the designated bin and the full pipeline completes. Fail = wrong box, dropped, or timeout (>2 min).
+- **3 conditions × 10 trials = 30 runs**
   - **A** — 1–2 identical objects, randomly placed
-  - **B** — 3–5 mixed / repeated objects, randomly placed
-  - **C** — 5 random objects + clutter (paper scraps, debris)
+  - **B** — 3 mixed objects, randomly placed
+  - **C** — 3 random objects + clutter (paper scraps, debris)
 
 ### Success rate by condition and tool
 
 | Tool        | Cond A | Cond B | Cond C |
 |-------------|--------|--------|--------|
 | Screwdriver | 80%    | 80%    | 60%    |
-| Plier       | 0%     | 0%     | 0%     |
+| Plier       | 20%    | 0%     | 0%     |
 | Tape        | 90%    | 70%    | 50%    |
 | Pen         | 80%    | 20%    | 10%    |
 | Scissor     | 50%    | 60%    | 40%    |
-| **Average** | **60%**| **46%**| **32%**|
+| **Average** | **64%**| **46%**| **32%**|
 
-> Plier consistently fails — handle geometry causes the gripper to slip before lift. Pen drops sharply A→B because grasp position has to be precise and gets confused under multi-object scenes. Scissor and screwdriver hold up well even in clutter.
+> Plier reaches 20% only in Cond A (isolated handle, gripper occasionally catches) and collapses back to 0% under any clutter — geometry is the persistent failure mode. Pen drops sharply A→B because grasp position has to be precise and gets confused under multi-object scenes. Scissor and screwdriver hold up well even in Cond C.
 
 ### Cycle time · range (s)
 
 | Stage          | Cond A   | Cond B   | Cond C   |
 |----------------|----------|----------|----------|
-| Hover          | 7–9      | 9–12     | 9–14     |
+| Hover          | 7–10     | 9–12     | 10–14    |
 | Pickup         | 20       | 20       | 20       |
 | Placement      | 20       | 20       | 20       |
-| **Full cycle** | **47–90**| **56–115**| **65–135**|
+| **Full cycle** | **47–90**| **95–115**| **95–135**|
 | Attempts/trial | 1–3      | 3–6      | 5–8      |
 
-Lower bound = sum of stages + minimal overhead; upper bound = failed attempts hitting the 60 s timeout or YOLO re-detecting under clutter.
+Lower bound = sum of stages + minimal overhead; upper bound = failed cycles hitting the 2 min timeout or YOLO re-detecting under clutter. B/C lower bounds sit above A because real B/C cycles always include some retry overhead — clean first-pass successes are rare.
 
-### Failure modes — 80 fails / 130 attempts
+### Failure modes — 80 fails / 130 cycles (62% fail rate)
 
 | Mode | Share | Count | What it looks like |
 |---|---|---|---|
-| Pickup miss | 50% | 40 | Grasp slips before the lift completes (loose grip or wrong grasp pose) |
-| Drop | 25% | 20 | Object lost mid-trajectory between hover and placement |
-| Launch fail | 15% | 12 | Dual-arm launch instability — opposing arm fires unexpectedly |
-| Wrong-box placement | 10% | 8 | Released into the wrong rack slot — mostly Cond C |
+| Pickup miss | 45% | 36 | Grasp slips before the lift completes. |
+| Drop | 25% | 20 | Object lost mid-trajectory. |
+| Wrong YOLO detection | 15% | 12 | YOLO locks onto a non-target object. |
+| Wrong-box placement | 10% | 8 | Released into the wrong rack slot. |
+| Launch fail | 5% | 4 | Dual-arm bringup throws errors and exits. |
 
-Raw trial data is committed alongside the report as `left_*.csv` / `right_*.csv` (per-arm, per-tool home poses) and the trial log.
+Raw trial data is committed alongside the report as `left_*.csv` / `right_*.csv` (per-arm, per-tool home poses) and the trial log under `soa_ws/joints.csv`.
+
+### Beyond raw success rate
+
+- **Safety** — zero arm-to-arm collisions and no unsafe gripper-to-table contact across all trials. The hardcoded workspace zoning we added after Pre1 holds up reliably.
+- **Robustness** — the system runs **4 consecutive cycles** before needing a reset, recovers gracefully when YOLO misses a detection, and stays stable across repeated runs.
+- **Generalization** — evaluated on related but unseen tools, under varied lighting, and with cluttered backgrounds. Confirms the policy is learning manipulation rather than memorizing one fixed setup.
+
+---
+
+## Team contributions
+
+| | Suzy Hong | Chenming Ge | Lya Liu |
+|---|---|---|---|
+| Data | Collected dataset and trained YOLO detector | Configured bimanual SO-101, calibrated camera-arm setup | Collected YOLO object detection dataset |
+| Training / system | Assisted ACT policy training and Rosetta contract | Led MoveIt recording and Rosetta debugging | Fine-tuned the VLA model on collected demonstrations |
+| Evaluation | Recorded per-trial outcomes and failure modes | Ran the pipeline each evaluation trial | Timed cycles and computed cycle-time stats |
 
 ---
 
@@ -266,9 +283,10 @@ Then use `lerobot-record` against the bi-arm setup to log demonstrations to `hug
 
 ## Known limitations
 
-- **Dual-arm launch is not yet stable** — still iterating on namespaces + TF prefixes. The "Launch fail" failure mode (15% of fails) reflects this.
-- **Plier (0% success)** — gripper geometry can't catch the handle reliably. Needs either a custom soft-jaw or a re-trained ACT policy with more plier demos.
+- **Dual-arm launch is not yet stable** — still iterating on namespaces + TF prefixes. The "Launch fail" failure mode (5% of fails) reflects this; most of the time the bringup is just-functional.
+- **Plier (0% in Cond B/C, 20% in Cond A)** — gripper geometry can't catch the handle reliably under any clutter. Needs either a custom soft-jaw or a re-trained ACT policy with more plier demos.
 - **Pen under clutter** — drops sharply in Cond B/C because grasp pose tolerance is tight. Possible fix: tighter YOLO bbox + closer-grip ACT policy.
+- **YOLO false positives** — page-5 mitigations (two extra fine-tune rounds + parking the arm outside the RealSense view at start) cleared most of them for Cond A/B, but Cond C clutter still triggers ~15% of remaining fails.
 
 ---
 
