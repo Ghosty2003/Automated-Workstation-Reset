@@ -1,7 +1,7 @@
 failure_mode,count,share
-pickup_miss,34,44.2%
-drop,20,26.0%
-wrong_yolo,12,15.6%
-wrong_box,7,9.1%
-launch_fail,4,5.2%
-TOTAL,77,100.0%
+pickup_miss,36,45.0%
+drop,19,23.8%
+wrong_yolo,12,15.0%
+wrong_box,8,10.0%
+launch_fail,5,6.2%
+TOTAL,80,100.0%

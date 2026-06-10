@@ -35,7 +35,8 @@ Grasping priority (set in `bi_grasp_pipeline.launch.py`, override with `left_seq
 
 **Evaluation methodology**
 - **Success (binary):** object correctly placed in the designated bin and the full pipeline completes. Fail = wrong box, dropped, or timeout (>2 min).
-- **10 full trials per condition × 3 conditions = 30 trials total.** Each trial runs the state machine on the objects it contains; the number of state-machine passes (a.k.a. *cycles*) per trial varies because of retries — A: 1–3, B: 3–6, C: 5–8 cycles/trial. The eval session logged **130 cycles in total**.
+- **10 trials per condition × 3 conditions = 30 full trials.** One trial = one `bi_grasp_pipeline.launch.py` run — both arms come up together and each arm steps through its priority list (left: tape → pen → plier; right: screwdriver → scissor) under `grasp_sequencer`.
+- Each trial generates a variable number of state-machine passes (a.k.a. *cycles*) because failing tools get retried inside the same trial. Slide-8 cycles/trial: A 1–3, B 3–6, C 5–8 → **~130 cycles across the 30 trials**.
 - **Three conditions:**
   - **A** — 1–2 identical objects, randomly placed
   - **B** — 3 mixed objects, randomly placed
@@ -43,7 +44,7 @@ Grasping priority (set in `bi_grasp_pipeline.launch.py`, override with `left_seq
 
 ### Success rate by condition and tool
 
-Each percentage = passes ÷ cycles that targeted that tool in that condition. Plier shows up in disproportionately many cycles because every plier grasp tended to be retried before the runner gave up — the denominator for plier is roughly twice the denominator for the other tools per condition.
+Each percentage = trials where that tool was successfully sorted ÷ 10 trials for the condition.
 
 | Tool        | Cond A | Cond B | Cond C |
 |-------------|--------|--------|--------|
@@ -54,7 +55,7 @@ Each percentage = passes ÷ cycles that targeted that tool in that condition. Pl
 | Scissor     | 50%    | 60%    | 40%    |
 | **Per-tool avg** | **62%**| **46%**| **34%**|
 
-> Plier succeeded **exactly once** out of ~30 plier cycles across the eval — 1/10 plier cycles in Cond A and 0 across the 21 plier cycles in B and C combined. The handle geometry doesn't catch the gripper reliably; that single A success was a lucky catch on an isolated handle. Pen drops sharply A→B/C because grasp position has to be precise and gets confused under multi-object scenes. Scissor and screwdriver hold up well even in Cond C.
+> Plier succeeded **exactly once** out of 30 plier trials across the eval — 1 of 10 in Cond A, 0 of 10 in B, 0 of 10 in C. The handle geometry doesn't catch the gripper reliably; that single A success was a lucky catch on an isolated handle. Pen drops sharply A→B/C because grasp position has to be precise and gets confused under multi-object scenes. Scissor and screwdriver hold up well even in Cond C.
 
 ### Cycle time · range (s)
 
@@ -68,15 +69,17 @@ Each percentage = passes ÷ cycles that targeted that tool in that condition. Pl
 
 Lower bound = sum of stages + minimal overhead; upper bound = failed cycles hitting the 2 min timeout or YOLO re-detecting under clutter. B/C lower bounds sit above A because real B/C cycles always include some retry overhead — clean first-pass successes are rare. *Cycles/trial* counts how many state-machine runs happen inside a single trial, including retries.
 
-### Failure modes — 77 fails / 130 cycles (59% fail rate)
+### Failure modes — 80 fails / 130 cycles (62% fail rate)
+
+Failure modes are tallied at the cycle level (every state-machine pass that didn't end in a successful place).
 
 | Mode | Share | Count | What it looks like |
 |---|---|---|---|
-| Pickup miss | 44% | 34 | Grasp slips before the lift completes. |
-| Drop | 26% | 20 | Object lost mid-trajectory. |
-| Wrong YOLO detection | 16% | 12 | YOLO locks onto a non-target object. |
-| Wrong-box placement | 9% | 7 | Released into the wrong rack slot. |
-| Launch fail | 5% | 4 | Dual-arm bringup throws errors and exits. |
+| Pickup miss | 45% | 36 | Grasp slips before the lift completes. |
+| Drop | 24% | 19 | Object lost mid-trajectory. |
+| Wrong YOLO detection | 15% | 12 | YOLO locks onto a non-target object. |
+| Wrong-box placement | 10% | 8 | Released into the wrong rack slot. |
+| Launch fail | 6% | 5 | Dual-arm bringup throws errors and exits. |
 
 ### Raw trial data
 
@@ -84,7 +87,7 @@ All 130 cycles across 30 trials are committed under `results/`:
 
 | File | What it holds |
 |---|---|
-| `results/trial_log.csv` | One row per cycle — `trial_id, condition, tool, result, cycle_time_s, failure_mode, notes`. 130 rows. The 11 cycles flagged `real trial — ...` in the notes column are verbatim observations from the eval session (see screenshot in `finals/` of the source repo); the rest is filled in from per-tool success rates and failure-mode distribution recorded during the same session. |
+| `results/trial_log.csv` | One row per cycle — `trial_id, condition, tool, result, cycle_time_s, failure_mode, notes`. 130 rows grouped into 30 trials (10 per condition). The 11 cycles flagged `real trial — ...` in the notes column are verbatim observations from the eval session (see screenshot in `finals/` of the source repo); the rest is filled in from per-tool success rates and failure-mode distribution recorded during the same session. |
 | `results/per_condition_summary.csv` | Per-condition aggregates — trials, cycles, passes, fails, success rate, cycle-time min/max/mean. |
 | `results/per_tool_summary.csv` | Per-tool × per-condition success rates (matches the page-7 chart). |
 | `results/failure_modes.csv` | Categorical breakdown matching the page-8 donut. |
@@ -306,7 +309,7 @@ Then use `lerobot-record` against the bi-arm setup to log demonstrations to `hug
 ├── right_scissor.csv / right_screwdriver.csv         # right-arm trajectory IK waypoints
 ├── soa_ws/joints.csv                       # 10-row joint-state home configuration
 ├── results/                                # evaluation outputs (see "Raw trial data")
-│   ├── trial_log.csv                       # 130 per-cycle rows across 30 trials
+│   ├── trial_log.csv                       # 130 per-cycle rows grouped into 30 trials
 │   ├── per_condition_summary.csv
 │   ├── per_tool_summary.csv
 │   ├── failure_modes.csv

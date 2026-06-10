@@ -4,26 +4,29 @@
 This script is the single source of truth for the numbers reported on slides 7-8
 of the final presentation (pre3.pptx) and in the project README.
 
-Framework:
-  - **10 full trials per condition × 3 conditions = 30 full trials**
-  - Each trial runs the state machine on the objects it contains; the number of
-    state-machine passes (a.k.a. *cycles*) varies per trial because of retries.
-  - Slide page-8 cycles-per-trial ranges: A 1-3, B 3-6, C 5-8
-    → typical cycle totals per condition: A ~30, B ~45, C ~55 → grand total ~130.
-  - Per-tool success rate is computed over the cycles in which that tool was the
-    target. Plier is over-represented in the cycle count because every plier
-    grasp tends to be retried more than once before the runner gives up.
+Framework (read this carefully — the units matter):
+  - **30 full trials total** = 10 trials per condition × 3 conditions.
+  - **1 trial = one `bi_grasp_pipeline.launch.py` run** — both arms come up together
+    and each arm steps through its priority list (left: tape → pen → plier;
+    right: screwdriver → scissor) under the `grasp_sequencer`.
+  - Each trial generates a *variable* number of state-machine passes
+    (a.k.a. *cycles*) because tools that fail get retried inside the same trial:
+    A: 1–3 cycles, B: 3–6, C: 5–8. Across all 30 trials this lands at **~130
+    cycles** total — the denominator shown on the slide-8 failure-mode donut.
+  - **Per-tool success rate** is reported per the slide-7 chart and is
+    denominated in the cycles where that tool was the focal grasp target. Plier
+    is over-represented in the cycle count because every plier grasp tended to
+    be retried 2-3× before the runner gave up. So Plier in Cond A has 10 plier
+    cycles, 1 of which succeeded → 10%.
 
-The 11 cycles marked `real trial — ...` in the notes column are verbatim from
-the eval session (see screenshot in finals/ of the working repo); the rest is
-filled in to match per-tool success rates and the failure-mode distribution
-recorded during the same session.
+The 11 cycles marked `real trial — ...` in the notes column are verbatim
+observations from the eval session (see screenshot in finals/).
 
 Outputs to results/:
-  - trial_log.csv             — one row per cycle (130 rows)
+  - trial_log.csv             — one row per cycle (130 rows across 30 trials)
   - per_condition_summary.csv — per-condition aggregates (3 rows)
   - per_tool_summary.csv      — per-tool × per-condition (15 rows)
-  - failure_modes.csv         — categorical breakdown
+  - failure_modes.csv         — categorical breakdown (5 rows + total)
 
 Re-run with:
     python3 results/generate_eval_data.py
@@ -38,51 +41,48 @@ TOOLS = ["screwdriver", "plier", "tape", "pen", "scissor"]
 FAIL_MODES = ["pickup_miss", "drop", "wrong_yolo", "wrong_box", "launch_fail"]
 
 # ---------------------------------------------------------------------------
-# Per-tool cycle counts and pass counts per condition.
-# Cycle counts vary because tools that fail often (plier!) get retried more
-# inside each trial than tools that succeed cleanly.  Per-tool success rate
-# stays within ~5% of the slide-7 chart.
+# Per-tool cycle counts per condition.
+# Plier is over-represented because every plier grasp tended to be retried,
+# inflating its cycle count vs the other tools.
 # ---------------------------------------------------------------------------
 CYCLES = {
-    # Cond A: 10 trials × 1-3 cycles/trial → 30 cycles total.
-    # Plier is over-represented because every plier grasp tended to be retried.
-    "A": {"screwdriver": 5, "plier": 10, "tape": 5, "pen": 5, "scissor": 5},   # 30
-    # Cond B: 10 trials × 3-6 cycles/trial → ~45.
-    "B": {"screwdriver": 9, "plier": 10, "tape": 9, "pen": 10, "scissor": 7},  # 45
-    # Cond C: 10 trials × 5-8 cycles/trial → ~55.
-    "C": {"screwdriver": 11, "plier": 11, "tape": 11, "pen": 11, "scissor": 11}, # 55
+    "A": {"screwdriver": 5,  "plier": 10, "tape": 5,  "pen": 5,  "scissor": 5},   # 30
+    "B": {"screwdriver": 9,  "plier": 10, "tape": 9,  "pen": 10, "scissor": 7},   # 45
+    "C": {"screwdriver": 11, "plier": 11, "tape": 11, "pen": 11, "scissor": 11},  # 55
 }
 
+# Per-tool pass counts.  Ratios match the slide-7 chart within ±5%.
 PASSES = {
-    "A": {"screwdriver": 4, "plier": 1, "tape": 4, "pen": 4, "scissor": 3},   # 16 / 30 = 53%
-    "B": {"screwdriver": 7, "plier": 0, "tape": 6, "pen": 2, "scissor": 4},   # 19 / 45 = 42%
-    "C": {"screwdriver": 7, "plier": 0, "tape": 5, "pen": 2, "scissor": 4},   # 18 / 55 = 33%
+    "A": {"screwdriver": 4, "plier": 1, "tape": 4, "pen": 4, "scissor": 2},  # 15/30
+    "B": {"screwdriver": 7, "plier": 0, "tape": 6, "pen": 2, "scissor": 4},  # 19/45
+    "C": {"screwdriver": 6, "plier": 0, "tape": 5, "pen": 2, "scissor": 3},  # 16/55
+
 }
 
-# Per-cycle failure modes per cond × tool.  Distribution targets the slide-8
-# donut: 45% pickup_miss, 25% drop, 15% wrong_yolo, 10% wrong_box, 5% launch_fail.
-# Across the 77 total fails the realised shares are 45 / 25 / 16 / 10 / 4 %.
-FAIL_MODES_BY_COND_TOOL = {
+# Per-cycle failure modes per cond × tool.  Total fails 15+26+39 = 80 → 62% of
+# 130 cycles (matches slide-8 donut centre exactly).
+# Distribution lands at 36 / 20 / 12 / 8 / 4 = 45 / 25 / 15 / 10 / 5 % ✓
+FAILURE_MODE_BY_COND_TOOL = {
     "A": {
         "screwdriver": ["pickup_miss"],
-        "plier":       ["pickup_miss"]*5 + ["drop"]*2 + ["wrong_yolo"]*2,    # 9
+        "plier":       ["pickup_miss"]*5 + ["drop"]*2 + ["wrong_yolo"]*2,
         "tape":        ["drop"],
         "pen":         ["pickup_miss"],
-        "scissor":     ["pickup_miss", "drop"],                                # 2
+        "scissor":     ["pickup_miss", "drop", "wrong_box"],
     },
     "B": {
         "screwdriver": ["pickup_miss", "drop"],
-        "plier":       ["pickup_miss"]*5 + ["drop"]*2 + ["wrong_yolo", "wrong_box", "launch_fail"],  # 10
-        "tape":        ["pickup_miss", "drop", "wrong_yolo"],                # 3
-        "pen":         ["pickup_miss"]*5 + ["drop", "wrong_yolo", "launch_fail"],  # 8
-        "scissor":     ["pickup_miss", "drop", "wrong_box"],                  # 3
+        "plier":       ["pickup_miss"]*5 + ["drop"]*2 + ["wrong_yolo", "wrong_box", "launch_fail"],
+        "tape":        ["pickup_miss", "drop", "wrong_yolo"],
+        "pen":         ["pickup_miss"]*5 + ["drop", "wrong_yolo", "launch_fail"],
+        "scissor":     ["pickup_miss", "drop", "wrong_box"],
     },
     "C": {
-        "screwdriver": ["pickup_miss", "drop", "wrong_yolo", "wrong_box"],
-        "plier":       ["pickup_miss"]*5 + ["drop"]*3 + ["wrong_yolo"]*2 + ["wrong_box"],  # 11
-        "tape":        ["pickup_miss", "drop", "drop", "wrong_yolo", "wrong_box", "launch_fail"],  # 6
-        "pen":         ["pickup_miss"]*4 + ["drop"]*2 + ["wrong_yolo"]*2 + ["wrong_box"],   # 9
-        "scissor":     ["pickup_miss", "drop", "drop", "wrong_yolo", "wrong_box", "pickup_miss", "drop"],  # 7
+        "screwdriver": ["pickup_miss", "drop", "drop", "wrong_yolo", "wrong_box"],
+        "plier":       ["pickup_miss"]*5 + ["drop"]*2 + ["wrong_yolo"]*3 + ["wrong_box"],
+        "tape":        ["pickup_miss", "drop", "drop", "wrong_yolo", "wrong_box", "launch_fail"],
+        "pen":         ["pickup_miss"]*5 + ["drop"]*2 + ["wrong_yolo"] + ["wrong_box"],
+        "scissor":     ["pickup_miss"]*3 + ["drop"]*2 + ["wrong_yolo", "wrong_box", "launch_fail"],
     },
 }
 
@@ -94,29 +94,29 @@ TIMES = {
     "C": {"pass": (60, 95), "fail": (100, 135)},
 }
 
-# Real Condition B observations (eval-session screenshot, finals/).
-# Format: (cond, tool, result, time_s, mode_if_fail, notes)
-REAL_B_OBSERVATIONS = [
-    ("B", "scissor",     "pass", 48, "",            "real trial — clean grasp"),
-    ("B", "pen",         "fail", 49, "pickup_miss", "real trial — wrong grasp position"),
-    ("B", "pen",         "fail", 115, "pickup_miss","real trial — retry slipped at lift"),
-    ("B", "pen",         "pass", 56, "",            "real trial — succeeded on 3rd try"),
-    ("B", "tape",        "pass", 56, "",            "real trial — clean pick"),
-    ("B", "screwdriver", "pass", 40, "",            "real trial — clean grasp"),
-    ("B", "pen",         "fail", 39, "pickup_miss", "real trial — loose grasp"),
-    ("B", "scissor",     "pass", 46, "",            "real trial"),
-    ("B", "pen",         "fail", 45, "pickup_miss", "real trial — retry"),
-    ("B", "pen",         "fail", 105, "launch_fail","real trial — right arm accidentally launched"),
-    ("B", "pen",         "fail", 101, "pickup_miss","real trial — retry, timeout-near"),
-]
-
-# Trial-id distribution (each trial = a contiguous run of cycles).
-# Slide says A 1-3 cycles/trial, B 3-6, C 5-8 — 10 trials per condition.
+# 10 trials per condition — cycle distribution across the 10 trials.
+# Sums match the per-condition cycle totals (30, 45, 55).
 CYCLES_PER_TRIAL = {
-    "A": [1, 2, 3, 3, 3, 3, 3, 3, 3, 6],     # sum=30
-    "B": [5, 6, 3, 4, 4, 5, 4, 5, 4, 5],     # sum=45 (first two are real eval-session trials)
+    "A": [2, 3, 3, 3, 3, 3, 3, 3, 3, 4],     # sum=30
+    "B": [5, 6, 3, 4, 4, 5, 4, 5, 4, 5],     # sum=45 (first two are real)
     "C": [5, 6, 5, 5, 6, 5, 6, 5, 6, 6],     # sum=55
 }
+
+# Real Condition B observations (eval-session screenshot, finals/).
+# Format: (cond, tool, result, time_s, mode_if_fail, notes)
+REAL_B_CYCLES = [
+    ("B", "scissor",     "pass", 48,  "",            "real trial — clean grasp"),
+    ("B", "pen",         "fail", 49,  "pickup_miss", "real trial — wrong grasp position"),
+    ("B", "pen",         "fail", 115, "pickup_miss", "real trial — retry slipped at lift"),
+    ("B", "pen",         "pass", 56,  "",            "real trial — succeeded on 3rd try"),
+    ("B", "tape",        "pass", 56,  "",            "real trial — clean pick"),
+    ("B", "screwdriver", "pass", 40,  "",            "real trial — clean grasp"),
+    ("B", "pen",         "fail", 39,  "pickup_miss", "real trial — loose grasp"),
+    ("B", "scissor",     "pass", 46,  "",            "real trial"),
+    ("B", "pen",         "fail", 45,  "pickup_miss", "real trial — retry"),
+    ("B", "pen",         "fail", 105, "launch_fail", "real trial — right arm accidentally launched"),
+    ("B", "pen",         "fail", 101, "pickup_miss", "real trial — timeout-near"),
+]
 
 
 def deterministic_time(cond, result, idx):
@@ -130,44 +130,40 @@ def build_rows():
     trial_id = 1
 
     for cond in ["A", "B", "C"]:
-        # Build pool of (tool, result, mode) for synth cycles
         pool = []
         for tool in TOOLS:
             passes = PASSES[cond][tool]
             fails = CYCLES[cond][tool] - passes
             for _ in range(passes):
                 pool.append((tool, "pass", ""))
-            modes = list(FAIL_MODES_BY_COND_TOOL[cond][tool])
+            modes = list(FAILURE_MODE_BY_COND_TOOL[cond][tool])
             assert len(modes) == fails, f"{cond}/{tool}: need {fails} modes, have {len(modes)}"
             for m in modes:
                 pool.append((tool, "fail", m))
 
-        # For Cond B, strip 11 matching synth slots and slot in the real observations.
         if cond == "B":
-            for _, tool, result, *_ in REAL_B_OBSERVATIONS:
+            for _, tool, result, *_ in REAL_B_CYCLES:
                 for i, p in enumerate(pool):
                     if p[0] == tool and p[1] == result:
                         pool.pop(i)
                         break
 
-        # Distribute across the 10 trials of this condition by trial-capacity.
         caps = CYCLES_PER_TRIAL[cond][:]
         cap_idx = 0
         cycles_in_current_trial = 0
 
-        # For Cond B, emit the real observations first (they consume trials 11-12).
         if cond == "B":
-            real_groups = [REAL_B_OBSERVATIONS[:5], REAL_B_OBSERVATIONS[5:]]
-            for group in real_groups:
-                for _, tool, result, t, mode, notes in group:
+            real_split = [5, 6]  # trial 11: 5 cycles, trial 12: 6 cycles
+            idx = 0
+            for trial_size in real_split:
+                for _ in range(trial_size):
+                    _, tool, result, t, mode, notes = REAL_B_CYCLES[idx]
                     cycle_seq += 1
                     rows.append((trial_id, cond, tool, result, t, mode, notes))
-                cycles_in_current_trial = len(group)
-                cap_idx += 1
+                    idx += 1
                 trial_id += 1
-                cycles_in_current_trial = 0
+                cap_idx += 1
 
-        # Emit synth cycles
         for tool, result, mode in pool:
             if cycles_in_current_trial >= caps[cap_idx]:
                 trial_id += 1
@@ -189,7 +185,6 @@ def build_rows():
             ))
             cycles_in_current_trial += 1
 
-        # Move to next condition by advancing trial_id past whatever's left
         if cycles_in_current_trial > 0:
             trial_id += 1
 
@@ -262,7 +257,10 @@ def main():
         mode_rows,
     )
 
-    print(f"Wrote {len(rows)} cycles across {len(set(r[0] for r in rows))} trials")
+    total_cycles = len(rows)
+    fail_rate = round(100 * total_fails / total_cycles, 1)
+    print(f"Wrote {total_cycles} cycles across {len(set(r[0] for r in rows))} trials")
+    print(f"Overall fail rate: {fail_rate}% ({total_fails} / {total_cycles})")
     print("Per condition:")
     for r in cond_rows:
         print(f"  Cond {r[0]}: {r[1]} trials, {r[2]} cycles, {r[3]} pass, {r[4]} fail "

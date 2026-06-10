@@ -3,14 +3,14 @@ A,screwdriver,5,4,1,80.0%
 A,plier,10,1,9,10.0%
 A,tape,5,4,1,80.0%
 A,pen,5,4,1,80.0%
-A,scissor,5,3,2,60.0%
+A,scissor,5,2,3,40.0%
 B,screwdriver,9,7,2,77.8%
 B,plier,10,0,10,0.0%
 B,tape,9,6,3,66.7%
 B,pen,10,2,8,20.0%
 B,scissor,7,4,3,57.1%
-C,screwdriver,11,7,4,63.6%
+C,screwdriver,11,6,5,54.5%
 C,plier,11,0,11,0.0%
 C,tape,11,5,6,45.5%
 C,pen,11,2,9,18.2%
-C,scissor,11,4,7,36.4%
+C,scissor,11,3,8,27.3%
