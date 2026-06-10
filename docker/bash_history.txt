@@ -1,0 +1,519 @@
+source ~/.bashrc
+ros2 launch aruco_tracker_ros2 aruco_cube_tracker.launch.py
+ros2 run tf2_ros tf2_echo base_link aruco_cube
+ros2 launch aruco_tracker_ros2 aruco_cube_tracker.launch.py
+ros2 run tf2_ros static_transform_publisher   0.1419 0.0926 0.0665   -0.1437 0.3916 -0.1536 0.8958   base_link overhead_camoverhead_cam_color_optical_frame
+ros2 launch yolo_bringup yolov8_3d.launch.py
+# Check available launch files
+ls ~/techin517/install/yolo_bringup/share/yolo_bringup/launch/
+# Or check the source
+ros2 launch yolo_bringup yolov8.launch.py
+ros2 topic list | grep yolo
+ros2 topic echo /yolo/detections
+ros2 param list /yolo/yolo_node
+# Check the launch file
+cat ~/techin517/src/yolo_ros/yolo_bringup/launch/yolov8.launch.py | grep -A 5 -B 5 depth
+ros2 topic echo /yolo/detections
+ros2 topic list | grep yolo
+ros2 topic echo /yolo/detections_3d
+# Use your final calibration values
+ros2 run tf2_ros static_transform_publisher   --x 0.1419 --y 0.0926 --z 0.0665   --qx -0.1437 --qy 0.3916 --qz -0.1536 --qw 0.8958   --frame-id follower/base_link   --child-frame-id overhead_camoverhead_cam_color_optical_frame
+# Stop the old one and run this:
+ros2 run tf2_ros static_transform_publisher   --x 0.1419 --y 0.0926 --z 0.0665   --qx -0.1437 --qy 0.3916 --qz -0.1536 --qw 0.8958   --frame-id base_link   --child-frame-id overhead_camoverhead_cam_color_optical_frame
+ros2 run tf2_ros static_transform_publisher   --x 0.1419 --y 0.0926 --z 0.0665   --qx -0.1437 --qy 0.3916 --qz -0.1536 --qw 0.8958   --frame-id base_link   --child-frame-id overhead_camoverhead_cam_color_optical_frame
+ros2 run tf2_ros tf2_echo base_link aruco_cube
+ros2 topic echo /tf | grep aruco_cube
+ros2 run tf2_ros tf2_echo base_link aruco_cube
+history
+ros2 launch soa_bringup soa_bringup.launch.py leader:=true display:=true
+lerobot-teleoperate     --robot.type=so101_follower     --robot.port=/dev/ttyACM1     --robot.id=Kid_right     --robot.cameras="{ front: {type: opencv, index_or_path: 0, width: 1920, height: 1080, fps: 30}}"     --teleop.type=so101_leader     --teleop.port=/dev/ttyACM2     --teleop.id=Mom_right     --display_data=true
+conda activate lerobot
+lerobot-teleoperate     --robot.type=so101_follower     --robot.port=/dev/ttyACM1     --robot.id=Kid_right     --robot.cameras="{ front: {type: opencv, index_or_path: 0, width: 1920, height: 1080, fps: 30}}"     --teleop.type=so101_leader     --teleop.port=/dev/ttyACM2     --teleop.id=Mom_right     --display_data=true
+lerobot-teleoperate     --robot.type=so101_follower     --robot.port=/dev/ttyACM1     --robot.id=Kid_right     --robot.cameras="{ front: {type: opencv, index_or_path: 0, width: 1920, height: 1080, fps: 30}}"     --teleop.type=so101_leader     --teleop.port=/dev/ttyACM2     --teleop.id=Mom_right 
+lerobot-find-port
+lerobot-teleoperate     --robot.type=so101_follower     --robot.port=/dev/ttyACM0     --robot.id=Kid_right     --robot.cameras="{ front: {type: opencv, index_or_path: 0, width: 1920, height: 1080, fps: 30}}"     --teleop.type=so101_leader     --teleop.port=/dev/ttyACM1     --teleop.id=Mom_right 
+lerobot-teleoperate     --robot.type=so101_follower     --robot.port=/dev/ttyACM0     --robot.id=Kid_right     --robot.cameras="{ front: {type: opencv, index_or_path: 0, width: 1920, height: 1080, fps: 5}}"     --teleop.type=so101_leader     --teleop.port=/dev/ttyACM1     --teleop.id=Mom_right 
+ros2 launch soa_bringup soa_bringup.launch.py leader:=true display:=true
+lerobot-calibrate     --robot.type=so101_follower     --robot.port=/dev/ttyACM0     --robot.id=Kid_right
+lerobot-calibrate     --teleop.type=so101_leader     --teleop.port=/dev/ttyACM1     --teleop.id=Mom_right
+ros2 launch soa_bringup soa_bringup.launch.py leader:=true display:=true
+cd ros2_ws/
+colcon build
+source install/setup.bash 
+ros2 launch soa_bringup soa_bringup.launch.py leader:=true display:=true
+cd 
+cd .cache/
+ls
+cd huggingface
+ls
+touch test
+ls
+cd'
+cd
+cd techin517/
+lerobot-calibrate     --teleop.type=so101_leader     --teleop.port=/dev/ttyACM1     --teleop.id=Mom_right
+lerobot-calibrate     --robot.type=so101_follower     --robot.port=/dev/ttyACM0     --robot.id=Kid_right
+sudo chmod 666 /dev/ttyACM0
+lerobot-calibrate     --robot.type=so101_follower     --robot.port=/dev/ttyACM0     --robot.id=Kid_right
+cd ros2_ws/
+source install/setup.bash 
+ros2 launch soa_bringup soa_bringup.launch.py leader:=true display:=true
+lerobot-calibrate     --robot.type=so101_follower     --robot.port=/dev/ttyACM0     --robot.id=Kid_right
+ros2 launch soa_bringup soa_bringup.launch.py leader:=true display:=true
+ros2 launch soa_moveit_config soa_moveit_bringup.launch.py
+ros2 launch soa_moveit_config soa_moveit_bringup.launch.py camera:=true
+ros2 launch soa_moveit_config soa_moveit_bringup.launch.py
+ros2 launch soa_bringup soa_bringup.launch.py leader:=true display:=true
+cd ~/techin517
+colcon build --packages-select hand_eye_calibration
+source install/setup.bash
+ros2 launch soa_bringup soa_bringup.launch.py leader:=true display:=true
+cd ~/techin517
+# Build with symlink install
+colcon build --symlink-install
+source install/setup.bash
+cd ros2_ws
+conda deactivate
+colcon build --symlink-install
+source install/setup.bash
+ros2 launch soa_bringup soa_bringup.launch.py leader:=true display:=true
+ros2 launch soa_moveit_config soa_moveit_bringup.launch.py
+ros2 launch soa_moveit_config soa_moveit_bringup.launch.py camera:=true
+ros2 launch soa_bringup soa_bringup.launch.py leader:=true display:=true
+ros2 launch soa_moveit_config soa_moveit_bringup.launch.py camera:=true
+# Launch YOLO with parameters for depth integration
+ros2 launch yolo_bringup yolov8.launch.py   input_image_topic:=/static_camera/overhead_cam/color/image_raw   input_depth_topic:=/static_camera/overhead_cam/aligned_depth_to_color/image_raw   input_depth_info_topic:=/static_camera/overhead_cam/aligned_depth_to_color/camera_info   depth_image_units_divisor:=1000
+# Launch YOLO with parameters for depth integration
+ros2 launch yolo_bringup yolov8.launch.py   input_image_topic:=/static_camera/overhead_cam/color/image_raw   input_depth_topic:=/static_camera/overhead_cam/aligned_depth_to_color/image_raw   input_depth_info_topic:=/static_camera/overhead_cam/aligned_depth_to_color/camera_info   depth_image_units_divisor:=1000
+# Downgrade numpy to version 1.x (compatible with ROS2 Humble)
+pip install "numpy<2" --break-system-packages
+# Install ultralytics
+pip install ultralytics --break-system-packages
+# Rebuild YOLO packages
+cd ~/techin517
+colcon build --packages-select yolo_ros yolo_bringup
+source install/setup.bash
+conda deactivate
+pip install "numpy<2" --break-system-packages
+pip install ultralytics --break-system-packages
+# Downgrade numpy to version 1.x (compatible with ROS2 Humble)
+pip install "numpy<2" --break-system-packages
+# Install ultralytics
+pip install ultralytics --break-system-packages
+# Rebuild YOLO packages
+cd ~/techin517
+colcon build --packages-select yolo_ros yolo_bringup
+source install/setup.bash
+# Force downgrade numpy again
+pip install "numpy<2" --force-reinstall --break-system-packages
+# Source your workspace
+source ~/techin517/install/setup.bash
+# Try launching YOLO
+ros2 launch yolo_bringup yolov8.launch.py   input_image_topic:=/static_camera/overhead_cam/color/image_raw   input_depth_topic:=/static_camera/overhead_cam/aligned_depth_to_color/image_raw
+pip install ultralytics
+ros2 launch yolo_bringup yolov8.launch.py   input_image_topic:=/static_camera/overhead_cam/color/image_raw   input_depth_topic:=/static_camera/overhead_cam/aligned_depth_to_color/image_raw
+conda activate base
+conda install numpy=1.23 -y
+# Create new conda environment with Python 3.10
+conda create -n ros2_yolo python=3.10 -y
+# Activate it
+conda activate ros2_yolo
+# Install compatible numpy
+conda install numpy=1.23 -y
+# Install other dependencies
+conda install -c conda-forge opencv pyyaml -y
+pip install ultralytics lap scipy pillow requests psutil
+# Source ROS2 in this environment
+source /opt/ros/humble/setup.bash
+source ~/techin517/install/setup.bash
+# Verify Python and numpy versions
+python --version  # Should be 3.10
+python -c "import numpy; print(numpy.__version__)"  # Should be 1.23.x
+# Try YOLO
+ros2 launch yolo_bringup yolov8.launch.py   input_image_topic:=/static_camera/overhead_cam/color/image_raw   input_depth_topic:=/static_camera/overhead_cam/aligned_depth_to_color/image_raw
+conda deactivate
+which python3
+python3 --version
+# Check numpy version
+python3 -c "import numpy; print(numpy.__version__)"
+# Check cv_bridge
+python3 -c "from cv_bridge import CvBridge; print('cv_bridge works')"
+# Check what packages are installed
+dpkg -l | grep python3-numpy
+# Remove all user-installed numpy versions
+pip uninstall numpy -y
+pip3 uninstall numpy -y
+# Remove from .local as well
+rm -rf ~/.local/lib/python3.10/site-packages/numpy*
+# Verify system numpy is now used
+python3 -c "import numpy; print(numpy.__version__)"  # Should show 1.21.5
+# Test cv_bridge
+python3 -c "from cv_bridge import CvBridge; print('cv_bridge works')"
+# Now try YOLO
+source /opt/ros/humble/setup.bash
+source ~/techin517/install/setup.bash
+ros2 launch yolo_bringup yolov8.launch.py   input_image_
+source /opt/ros/humble/setup.bash
+source ~/techin517/install/setup.bash
+ros2 launch yolo_bringup yolov8.launch.py   input_image_topic:=/static_camera/overhead_cam/color/image_raw   input_depth_topic:=/static_camera/overhead_cam/aligned_depth_to_color/image_raw
+# Install lap module
+pip3 install lap
+# Check if YOLO is publishing detections (tracking_node is optional)
+ros2 topic list | grep yolo
+# Check detections
+ros2 topic echo /yolo/detections --once
+# If detections work, you're good! The tracking_node is only for object tracking across frames, not needed for basic detection
+pip3 uninstall numpy -y
+rm -rf ~/.local/lib/python3.10/site-packages/numpy*
+# Install lap WITHOUT upgrading numpy
+pip3 install lap --no-deps
+# Verify numpy is still 1.21.5
+python3 -c "import numpy; print(numpy.__version__)"
+ros2 launch yolo_bringup yolov8.launch.py   input_image_topic:=/static_camera/overhead_cam/color/image_raw   input_depth_topic:=/static_camera/overhead_cam/aligned_depth_to_color/image_raw
+ros2 launch yolo_bringup yolov8.launch.py   input_image_topic:=/static_camera/overhead_cam/color/image_raw   input_depth_topic:=/static_camera/overhead_cam/aligned_depth_to_color/image_raw   input_depth_info_topic:=/static_camera/overhead_cam/aligned_depth_to_color/camera_info   depth_image_units_divisor:=1000   depth_image_reliability:=2
+ros2 launch yolo_bringup yolo.launch.py   use_3d:=True   input_image_topic:=/static_camera/overhead_cam/color/image_raw   input_depth_topic:=/static_camera/overhead_cam/aligned_depth_to_color/image_raw   input_depth_info_topic:=/static_camera/overhead_cam/aligned_depth_to_color/camera_info   depth_image_units_divisor:=1000   target_frame:=base_link
+ros2 launch aruco_tracker_ros2 aruco_cube_tracker.launch.py
+ros2 run soa_functions move_to_pose_server
+ros2 launch aruco_tracker_ros2 aruco_cube_tracker.launch.py
+cd ~/techin517
+colcon build --packages-select hand_eye_calibration
+source install/setup.bash
+ros2 launch aruco_tracker_ros2 aruco_cube_tracker.launch.py
+source install/setup.bash
+ros2 launch aruco_tracker_ros2 aruco_cube_tracker.launch.py
+ros2 run soa_functions move_to_pose_server
+ros2 run soa_functions gripper_server
+ros2 topic echo /aruco_cube_position --once
+ros2 topic list
+ros2 node info /aruco_cube_tracker
+# Check what TF frames are being published
+ros2 topic echo /tf --once
+# Or better yet, visualize the TF tree
+ros2 run tf2_tools view_frames
+# Wait a few seconds, then open the generated PDF
+evince frames.pdf
+ros2 run soa_apps pick_by_position.py --aruco
+cd ~/techin517
+colcon build --packages-select soa_apps
+source install/setup.bash
+colcon build --packages-select soa_apps
+source install/setup.bash
+ros2 run soa_apps pick_by_position --aruco
+ros2 run tf2_ros tf2_echo base_link aruco_cube
+# Check TF static frames
+ros2 topic echo /tf_static
+# Also check dynamic frames
+ros2 topic echo /tf | grep "frame_id"
+ros2 launch hand_eye_calibration calibration.launch.py calibration_type:=eye-on-base
+cd ~/techin517
+colcon build --packages-select hand_eye_calibration
+source install/setup.bash
+ros2 launch hand_eye_calibration calibration.launch.py calibration_type:=eye-on-base
+source install/setup.bash
+ros2 launch hand_eye_calibration calibration.launch.py calibration_type:=eye-on-base
+ros2 run soa_functions gripper_server
+ros2 launch hand_eye_calibration calibration.launch.py calibration_type:=eye-on-base
+ros2 run soa_functions gripper_server
+ros2 run soa_apps pick_by_position 0.2 0.1 0.05
+ros2 service call /hand_eye_calibration/capture_point std_srvs/srv/Trigger {}
+cd ~/techin517
+colcon build --packages-select hand_eye_calibration
+source install/setup.bash
+ros2 service call /hand_eye_calibration/capture_point std_srvs/srv/Trigger {}
+source install/setup.bash
+ros2 service call /hand_eye_calibration/capture_point std_srvs/srv/Trigger {}
+ros2 run soa_apps pick_by_position 
+ros2 run tf2_ros tf2_echo follower/base_link aruco_cube
+ros2 run soa_apps pick_by_position 0.501 0.183 0.297
+ros2 run soa_apps pick_by_position 0.501 0.183 0.15
+ros2 run soa_apps pick_by_position 0.501 0.183 0.1
+ros2 run tf2_ros tf2_echo base_link aruco_cube
+ros2 run soa_apps pick_by_position 0.222 0.034 0.004
+ros2 run soa_apps pick_by_position 0.228 0.032 0.015
+ros2 topic echo /tf_static | grep -A 10 "overhead_cam"
+ros2 run soa_apps pick_by_position 0.499 0.185 0.217
+# Test position - should be within reach
+ros2 run soa_apps pick_by_position 0.25 0.10 0.10
+ros2 run soa_apps pick_by_position 0.499 0.185 0.217
+ros2 run soa_apps pick_by_position 0.25 0.10 0.10
+ros2 run soa_apps pick_by_position 0.499 0.185 0.217
+ros2 run soa_apps pick_by_position 0.499 0.185 0.117
+ros2 run soa_apps pick_by_position 0.399 0.185 0.117
+ros2 run soa_apps pick_by_position 0.299 0.185 0.117
+ros2 run soa_apps pick_by_position 0.259 0.185 0.117
+ros2 run tf2_ros static_transform_publisher   0.1419 0.0926 0.0665   -0.1437 0.3916 -0.1536 0.8958   base_link overhead_camoverhead_cam_color_optical_frame
+ros2 run tf2_ros tf2_echo base_link aruco_cube
+ros2 service call /hand_eye_calibration/capture_point std_srvs/srv/Trigger {}
+82  0.372  0.885  0.029
+At time 1778026957.678382080
+- Translation: [-0.086, -0.162, 0.024]
+- Rotation: in Quaternion (xyzw) [-0.010, 0.231, 0.789, 0.569]
+- Rotation: in RPY (radian) [0.377, 0.284, 1.946]
+- Rotation: in RPY (degree) [21.593, 16.264, 111.481]
+- Matrix:
+ros2 run soa_apps pick_by_position -0.086 -0.162 0.024
+ros2 run soa_apps pick_by_position 0.086 0.162 0.024
+ros2 run soa_apps pick_by_position 0.370 0.317 0.101
+ros2 run soa_apps pick_by_position 0.270 0.317 0.101
+ros2 run soa_apps pick_by_position 0.170 0.317 0.101
+ros2 run soa_apps pick_by_position 0.170 0.217 0.101
+ros2 run soa_apps pick_by_position 0.162 0.86 0.024
+ros2 run soa_apps pick_by_position 0.0162 0.086 0.024
+ros2 run soa_apps pick_by_position 0.162 0.086 0.024
+ros2 run soa_apps pick_by_position 0.198 0.098 0.058
+ros2 run soa_apps pick_by_position 0.198 0.075 0.058
+ros2 run soa_apps pick_by_position 0.201 0.112 0.058
+ros2 run soa_apps pick_by_position 0.151 0.075 0.058
+ros2 run soa_apps pick_by_position 0.16 0.090 0.069
+ros2 run soa_apps pick_by_position 0.167 0.090 0.065
+ros2 run soa_apps pick_by_position 0.205 0.083 0.027
+ros2 run soa_apps pick_by_position 0.203 0.063 0.046
+ros2 run soa_apps pick_by_position 0.168 0.105 0.001
+ros2 run soa_apps pick_by_position 0.124 0.107 0.001
+ros2 run soa_apps pick_by_position 0.186 0.096 0.029
+ros2 run soa_apps pick_by_position 0.175 0.120 0.018
+ros2 run soa_apps pick_by_position 0.099 0.181 0.003
+ros2 run soa_apps pick_by_position 0.095 0.197 0.023
+ros2 run soa_apps pick_by_position 0.180 0.70 0.035
+ros2 run soa_apps pick_by_position 0.180 0.070 0.035
+ros2 run soa_apps pick_by_position 0.187 0.98 0.077
+ros2 run soa_apps pick_by_position 0.187 0.098 0.077
+ros2 run soa_apps pick_by_position 0.190 0.071 0.067
+ros2 run soa_apps pick_by_position 0.183 0.079 0.046
+ros2 run soa_apps pick_by_position 0.179 0.110 0.014
+ros2 run soa_apps pick_by_position 0.190 0.108 0.022
+ros2 run soa_apps pick_by_position 0.221 0.093 0.034
+ros2 run soa_apps pick_by_position 0.168 0.110 0.015
+ros2 run soa_apps pick_by_position 0.185 0.095 0.025 0.0 0.0 0.0 1.0
+ros2 run soa_apps pick_by_position 0.173 0.095 0.043 -0.590 0.425 0.266 0.633
+ros2 run soa_apps pick_by_position 0.173 0.095 0.043 0.0 0.0 0.0 1.0
+ros2 run soa_apps pick_by_position 0.173 0.095 0.043 -0.590 0.425 0.266 0.633
+ros2 run soa_apps pick_by_position 0.177 0.069 0.060 -0.530 0.183 0.710 -0.426
+ros2 action send_goal /run_policy     rosetta_interfaces/action/RunPolicy "{prompt: 'pick up the screwdriver'}"
+ros2 action send_goal /run_policy     rosetta_interfaces/action/RunPolicy "{prompt: 'pick up the screwdriver'}"
+ros2 action send_goal /run_policy     rosetta_interfaces/action/RunPolicy "{prompt: 'Clean the desk'}"
+ls /dev/video*
+ros2 node list | grep -i cam
+ros2 action send_goal /run_policy     rosetta_interfaces/action/RunPolicy "{prompt: 'Clean the desk'}"
+ros2 action send_goal /run_policy     rosetta_interfaces/action/RunPolicy "{prompt: 'pick up the screwdriver'}"
+ros2 action send_goal /run_policy     rosetta_interfaces/action/RunPolicy "{prompt: 'pick up cube'}"
+ros2 launch soa_bringup soa_bringup.launch.py
+ros2 launch soa_bringup soa_bringup.launch.py controller:=forward
+ros2 launch soa_bringup soa_bringup.launch.py controller:=forward display:=true
+ros2 launch soa_moveit_config soa_moveit_bringup.launch.py cameras:=true
+conda activate lerobot
+lerobot-find-port
+ros2 launch rosetta rosetta_client_launch.py     contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_contract.yaml     pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/act_so101_test/checkpoints/100000
+conda deactivate
+ros2 launch rosetta rosetta_client_launch.py     contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_contract.yaml     pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/act_so101_test/checkpoints/100000
+source /opt/ros/humble/setup.bash
+ros2 launch rosetta rosetta_client_launch.py     contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_contract.yaml     pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/act_so101_test/checkpoints/100000
+pip install "numpy>=1.22.4"
+ros2 launch rosetta rosetta_client_launch.py     contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_contract.yaml     pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/act_so101_test/checkpoints/100000
+ros2 launch rosetta rosetta_client_launch.py     contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_contract.yaml     pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/act_so101_test/checkpoints/100000/pretrained_model
+ros2 launch rosetta rosetta_client_launch.py     contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_contract.yaml     pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/act_so101_test/checkpoints/100000/pretrained_model
+pkill -f "policy_server" 2>/dev/null; fuser -k 8080/tcp 2>/dev/null; echo "done"
+ros2 launch rosetta rosetta_client_launch.py     contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_contract.yaml     pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/act_so101_test/checkpoints/100000/pretrained_model
+pkill -9 -f "policy_server"; pkill -9 -f "rosetta_client"; fuser -k 8080/tcp; sleep 3
+pkill -9 -f "policy_server"; pkill -9 -f "rosetta_client"; sleep 3
+ros2 launch rosetta rosetta_client_launch.py     contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_contract.yaml     pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/act_so101_test/checkpoints/100000/pretrained_model
+pkill -9 -f "policy_server"; pkill -9 -f "rosetta_client"; sleep 3
+ros2 launch rosetta rosetta_client_launch.py     contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_contract.yaml     pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/act_so101_test/checkpoints/100000/pretrained_model
+pkill -9 -f "policy_server"; pkill -9 -f "rosetta_client"; sleep 3
+ros2 launch rosetta rosetta_client_launch.py     contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_contract.yaml     pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/act_so101_test/checkpoints/100000/pretrained_model
+cd /home/ubuntu/techin517
+h rosetta policy_server --policy-path outputs/train/act_so101_test/checkpoints/100000/pretrained_model
+ros2 launch rosetta rosetta_client_launch.py     contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_contract.yaml     pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/act_so101_test/checkpoints/100000/pretrained_model
+source ~/techin517/ros2_ws/install/setup.bash
+ros2 launch rosetta rosetta_client_launch.py   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/act_so101_test/checkpoints/100000/pretrained_model
+source ~/techin517/ros2_ws/install/setup.bash
+ros2 launch rosetta rosetta_client_launch.py   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_moveit_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/act_so101_test/checkpoints/100000/pretrained_model
+cd ~/techin517 && source ros2_ws/install/setup.bash
+ros2 run soa_apps grasp_state_machine --ros-args   -p object_classes:='["screwdriver","scissors","roll of tape"]'   -p camera_topic:=/follower/image_raw   -p controller_switch_service:=/controller_switcher/switch_controller
+cd ~/techin517 && source ros2_ws/install/setup.bash
+ros2 run soa_apps grasp_state_machine --ros-args   -p object_classes:='["screwdriver","scissors","roll of tape"]'   -p camera_topic:=/follower/image_raw   -p controller_switch_service:=/controller_switcher/switch_controller
+cd ~/techin517 && source ros2_ws/install/setup.bash
+ros2 run soa_apps grasp_state_machine --ros-args   -p object_classes:='["screwdriver","scissors","roll of tape"]'   -p camera_topic:=/follower/image_raw   -p controller_switch_service:=/controller_switcher/switch_controller
+source ~/techin517/ros2_ws/install/setup.bash
+ros2 run soa_apps grasp_state_machine --ros-args   -p controller_switch_service:=/controller_switcher/switch_controller   -p prompt:="grasp scissors"
+source ~/techin517/ros2_ws/install/setup.bash
+ros2 run soa_apps hover_to_object scissors
+ros2 topic hz /yolo/detections_3d
+ros2 run soa_apps hover_to_object scissors
+ros2 action send_goal /run_policy     rosetta_interfaces/action/RunPolicy "{prompt: 'pick up the screwdriver'}"
+ros2 launch yolo_bringup yolo.launch.py   use_3d:=True   model:=/home/ubuntu/techin517/model/best.pt   input_image_topic:=/static_camera
+/overhead_cam/color/image_raw   input_depth_
+topic:=/static_camera/overhead_cam/aligned_d
+epth_to_color/image_raw   input_depth_info_t
+opic:=/static_camera/overhead_cam/aligned_de
+pth_to_color/camera_info   target_frame:=base_link
+ros2 launch yolo_bringup yolo.launch.py   use_3d:=True model:=/home/ubuntu/techin517/model/best.pt   input_image_topic:=/static_camera
+/overhead_cam/color/image_raw   input_depth_topic:=/static_camera/overhead_cam/aligned_d
+epth_to_color/image_raw input_depth_info_topic:=/static_camera/overhead_cam/aligned_depth_to_color/camera_info   target_frame:=base_link
+ros2 launch yolo_bringup yolo.launch.py   use_3d:=True model:=/home/ubuntu/techin517/model/best.pt   input_image_topic:=/static_camera
+/overhead_cam/color/image_raw   input_depth_topic:=/static_camera/overhead_cam/aligned_depth_to_color/image_raw input_depth_info_topic:=/static_camera/overhead_cam/aligned_depth_to_color/camera_info   target_frame:=base_link
+history
+ros2 launch yolo_bringup yolo-world.launch.py
+conda deactivate
+pip install "numpy<2.0"
+ros2 launch yolo_bringup yolo-world.launch.py
+ros2 run soa_functions move_to_pose_server
+ros2 run soa_functions gripper_server
+ros2 launch rosetta rosetta_client_launch.py   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_moveit_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right/checkpoints/100000/pretrained_model
+conda activate lerobot
+nch rosetta rosetta_client_l
+os2 launch rosetta rosetta_client_launch.py   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_moveit_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right/checkpoints/100000/pretrained_model
+[INFO] [launch]: All log files can be found below /home/ubuntu/.ros/log/2026-05-11-01-50-59-074122-GIX-30292585-6908
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [rosetta_client_node-1]: process started with pid [6921]
+[rosetta_client_node-1] Traceback (most recent call last):
+[rosetta_client_node-1]   File "/home/ubuntu/techin517/ros2_ws/install/rosetta/lib/rosetta/rosetta_client_node", line 18, in <module>
+[rosetta_client_node-1]     from rosetta.rosetta_client_node import main
+[rosetta_client_node-1]   File "/home/ubuntu/techin517/ros2_ws/install/rosetta/local/lib/python3.10/dist-packages/rosetta/__init__.py", line 52, in <module>
+[rosetta_client_node-1]     from .common.contract import (
+[rosetta_client_node-1]     ...<6 lines>...
+[rosetta_client_node-1]     )
+[rosetta_client_node-1]   File "/home/ubuntu/techin517/ros2_ws/install/rosetta/local/lib/python3.10/dist-packages/rosetta/common/__init__.py", line 28, in <module>
+[rosetta_client_node-1]     from .contract import (
+[rosetta_client_node-1]     ...<21 lines>...
+[rosetta_client_node-1]     )
+[rosetta_client_node-1]   File "/home/ubuntu/techin517/ros2_ws/install/rosetta/local/lib/python3.10/dist-packages/rosetta/common/contract.py", line 32, in <module>
+[rosetta_client_node-1]     from lerobot.utils.utils import is_valid_numpy_dtype_string
+[rosetta_client_node-1] ModuleNotFoundError: No module named 'lerobot'
+[ERROR] [rosetta_client_node-1]: process has died [pid 6921, exit code 1, cmd '/home/ubuntu/techin517/ros2_ws/install/rosetta/lib/rosetta/rosetta_client_node --ros-args --log-level info --ros-args -r __node:=rosetta_client -r __ns:=/ --params-file /home/ubuntu/techin517/ros2_ws/install/rosetta/share/rosetta/params/rosetta_client.yaml --params-file /tmp/launch_params_jun9wc2e'].
+ros2 launch rosetta rosetta_client_launch.py   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_moveit_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right/checkpoints/100000/pretrained_model
+conda deactivate
+ls /dev/ttyACM*
+ros2 launch soa_bringup soa_bringup.launch.py leader:=true cameras:=false
+ls /dev/ttyACM*
+ros2 launch soa_bringup soa_bringup.launch.py leader:=true cameras:=false
+clear
+ros2 launch soa_bringup soa_bringup.launch.py leader:=true cameras:=false
+clearf
+clear
+ros2 pkg prefix soa_bringup
+clear
+grep "LAUNCH DEBUG"
+ls /home/ubuntu/techin517/install 2>&1 | head -3
+rm -rf /home/ubuntu/techin517/install /home/ubuntu/techin517/build /home/ubuntu/techin517/log
+v4l2-ctl --list-devices
+rs-enumerate-devices | grep -E "Physical Port|Usb Type"
+ros2 launch soa_moveit_config soa_moveit_bringup.launch.py cameras:=true
+conda activate lerobot
+lerobot-find-port
+ros2 launch soa_moveit_config soa_moveit_bringup.launch.py cameras:=true
+ls -la /dev/ttyACM*
+ros2 launch soa_moveit_config soa_moveit_bringup.launch.py cameras:=true
+ros2 launch yolo_bringup yolo.launch.py   use_3d:=True   model:=/home/ubuntu/techin517/model/best.pt   input_image_topic:=/static_camera/overhead_cam/color/image_raw   input_depth_topic:=/static_camera/overhead_cam/aligned_depth_to_color/image_raw   input_depth_info_topic:=/static_camera/overhead_cam/aligned_depth_to_color/camera_info   target_frame:=base_link   depth_image_reliability:=2
+conda deactivate
+ros2 launch rosetta rosetta_client_launch.py   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_moveit_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right/checkpoints/100000/pretrained_model
+ros2 run soa_apps hover_to_object scissors
+ros2 run soa_apps hover_to_object scissor
+ros2 run soa_functions move_to_pose_server
+ros2 run soa_apps grasp_state_machine --ros-args   -p controller_switch_service:=/controller_switcher/switch_controller   -p prompt:="grasp scissors"
+ros2 run soa_apps grasp_state_machine --ros-args   -p controller_switch_service:=/controller_switcher/switch_controller   -p prompt:="Pick up the object"
+v4l2-ctl --list-devices
+ros2 launch soa_moveit_config soa_moveit_bringup.launch.py cameras:=true
+ros2 launch soa_bringup soa_bringup.launch.py leader:=true
+ros2 launch soa_bringup soa_bringup.launch.py leader:=true display:=true
+ros2 launch soa_moveit_config soa_moveit_bringup.launch.py cameras:=true
+ros2 launch soa_moveit_config soa_moveit_bringup.launch.py   arm_ns:=arm2   params_file:=soa_params_arm2.yaml   camera_config:=soa_cameras_arm2.yaml   cameras:=true
+ros2 run soa_functions move_to_pose_server --ros-args --remap __ns:=/arm2
+ros2 run soa_apps hover_to_object tape --ros-args -p arm_ns:=arm2
+ros2 run soa_functions move_to_pose_server --ros-args --remap __ns:=/arm2
+ros2 launch soa_moveit_config soa_moveit_bringup.launch.py
+ros2 run soa_apps hover_to_object scissor
+ros2 launch yolo_bringup yolo.launch.py   use_3d:=True   model:=/home/ubuntu/techin517/model/best.pt   input_image_topic:=/static_camera/overhead_cam/color/image_raw   input_depth_topic:=/static_camera/overhead_cam/aligned_depth_to_color/image_raw   input_depth_info_topic:=/static_camera/overhead_cam/aligned_depth_to_color/camera_info   target_frame:=base_link   depth_image_reliability:=2
+ros2 run soa_functions save_pose
+ros2 launch yolo_bringup yolo.launch.py   use_3d:=True   model:=/home/ubuntu/techin517/model/best.pt   input_image_topic:=/static_camera/overhead_cam/color/image_raw   input_depth_topic:=/static_camera/overhead_cam/aligned_depth_to_color/image_raw   input_depth_info_topic:=/static_camera/overhead_cam/aligned_depth_to_color/camera_info   target_frame:=base_link   depth_image_reliability:=2
+ros2 run soa_functions move_to_pose_server
+ros2 launch soa_bringup bi_soa_bringup.launch.py leader:=true cameras:=true display:=true
+ros2 launch rosetta rosetta_client_launch.py   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_moveit_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right/checkpoints/100000/pretrained_model
+conda deactivate
+ros2 launch rosetta rosetta_client_launch.py   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_moveit_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right/checkpoints/100000/pretrained_model
+ros2 service call /follower/save_pose soa_interfaces/srv/SaveJointStates     "{csv_path: '/home/ubuntu/techin517/poses_scissor.csv'}"
+ros2 launch rosetta rosetta_client_launch.py   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_moveit_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right/checkpoints/100000/pretrained_model
+ros2 launch rosetta rosetta_client_launch.py   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_moveit_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right_scissors/checkpoints/100000/pretrained_model
+ros2 run soa_functions gripper_server
+ros2 launch aruco_tracker_ros2 aruco_cube_tracker.launch.py
+ros2 run soa_apps grasp_state_machine --ros-args   -p controller_switch_service:=/controller_switcher/switch_controller   -p prompt:="grasp scissors"
+ros2 launch hand_eye_calibration calibration.launch.py   calibration_type:=eye-on-base   robot_base_frame:=follower/right_base_link
+ros2 launch hand_eye_calibration calibration.launch.py calibration_type:=eye-on-base
+ros2 launch hand_eye_calibration calibration.launch.py   calibration_type:=eye-on-base   robot_base_frame:=follower/right_base_link
+ros2 launch hand_eye_calibration calibration.launch.py   calibration_type:=eye-on-base   robot_base_frame:=follower/right_base_link   robot_effector_frame:=follower/right_gripper_frame_link
+ros2 service call /hand_eye_calibration/capture_point std_srvs/srv/Trigger {}
+ros2 launch bi_soa_moveit_config bi_soa_moveit_bringup.launch.py cameras:=true
+sudo chmod 666 /dev/video* /dev/ttyACM*
+ros2 launch bi_soa_moveit_config bi_soa_moveit_bringup.launch.py cameras:=true
+ros2 launch bi_soa_bringup bi_soa_bringup.launch.py leader:=true display:=true
+ros2 launch bi_soa_moveit_config bi_soa_moveit_bringup.launch.py cameras:=true
+ros2 launch yolo_bringup yolo.launch.py   use_3d:=True   model:=/home/ubuntu/techin517/model/best.pt   input_image_topic:=/static_camera/overhead_cam/color/image_raw   input_depth_topic:=/static_camera/overhead_cam/aligned_depth_to_color/image_raw   input_depth_info_topic:=/static_camera/overhead_cam/aligned_depth_to_color/camera_info   target_frame:=base_link   depth_image_reliability:=2
+ros2 run soa_functions move_to_pose_server --ros-args --remap __ns:=/left   -p move_group:=left_arm -p joint_prefix:=left_
+ros2 run soa_functions move_to_pose_server --ros-args   -p ns:=left -p move_group:=left_arm -p joint_prefix:=left_
+ros2 run soa_functions move_to_pose_server --ros-args   -p ns:=left -p move_group:=left_arm -p joint_prefix:=left_ -p base_link_name:=base_link
+ros2 launch rosetta rosetta_client_launch.py   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_moveit_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right_scissors/checkpoints/100000/pretrained_model
+conda deactivate
+ros2 launch rosetta rosetta_client_launch.py   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/soa_act_moveit_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right_scissors/checkpoints/100000/pretrained_model
+ros2 launch rosetta rosetta_client_launch.py   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/bi_soa_right_arm_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right_scissors/checkpoints/100000/pretrained_model
+ros2 launch rosetta rosetta_client_launch.py   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/bi_soa_right_arm_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right_scissors/checkpoints/100000/pretrained_model
+ros2 launch rosetta rosetta_client_launch.py contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/bi_soa_right_arm_contract.yaml pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right_scissors/checkpoints/100000/pretrained_model   server_address:=127.0.0.1:8080
+ros2 launch rosetta rosetta_client_launch.py   node_name:=rosetta_client_right   contract_path:=.../bi_soa_right_arm_contract.yaml   pretrained_name_or_path:=.../pick_up_right_scissors/.../pretrained_model   server_address:=127.0.0.1:8080
+ros2 launch rosetta rosetta_client_launch.py   node_name:=rosetta_client_right   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/bi_soa_right_arm_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right_scissors/checkpoints/100000/pretrained_model   server_address:=127.0.0.1:8080
+ros2 launch rosetta rosetta_client_launch.py   node_name:=rosetta_client_right   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/bi_soa_right_arm_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right_scissors/checkpoints/100000/pretrained_model   server_address:=127.0.0.1:8080
+ros2 run soa_apps grasp_state_machine --ros-args   -p arm_ns:=left -p hover_done_topic:=/left/hover_done   -p controller_switch_service:=/left/controller_switcher/switch_controller   -p policy_action:=/left_run_policy -p csv_path:=poses_scissor.csv
+rost topic list
+ros2 topic list
+ros2 run soa_functions move_to_pose_server --ros-args   -p ns:=left -p move_group:=left_arm -p joint_prefix:=left_
+ros2 run soa_apps grasp_state_machine --ros-args   -p arm_ns:=left -p hover_done_topic:=/left/hover_done   -p controller_switch_service:=/left/controller_switcher/switch_controller   -p policy_action:=/left_run_policy -p csv_path:=poses_scissor.csv
+ros2 run soa_apps hover_to_object scissor --ros-args -p arm_ns:=left
+ros2 run soa_functions move_to_pose_server --ros-args   -p ns:=right -p move_group:=right_arm -p joint_prefix:=right_
+ros2 run soa_functions gripper_server --ros-args   -p ns:=left -p move_group:=left_gripper -p joint_prefix:=left_
+ros2 run soa_functions gripper_server --ros-args   -p ns:=left -p move_group:=left_gripper -p joint_prefix:=left_
+ros2 run soa_functions gripper_server --ros-args   -p ns:=left -p move_group:=left_gripper -p joint_prefix:=left_ -p base_link_name:=base_link
+ros2 action list | grep run_policy
+ros2 lifecycle get /rosetta_client_right
+ros2 run soa_functions gripper_server --ros-args --remap __ns:=/left   -p move_group:=left_gripper -p joint_prefix:=left_
+ros2 run soa_apps hover_to_object scissor --ros-args -p arm_ns:=left
+ros2 run soa_apps hover_to_object scissor --ros-args -p arm_ns:=right
+ros2 run soa_apps hover_to_object scissor --ros-args -p arm_ns:=left
+ros2 run soa_apps hover_to_object scissor --ros-args -p arm_ns:=right
+ros2 run soa_functions move_to_pose_server --ros-args --remap __ns:=/right   -p move_group:=right_arm -p joint_prefix:=right_
+ros2 run soa_functions move_to_pose_server --ros-args   -p ns:=right -p move_group:=right_arm -p joint_prefix:=right_
+ros2 run soa_functions move_to_pose_server --ros-args   -p ns:=left -p move_group:=left_arm -p joint_prefix:=left_ -p base_link_name:=base_link
+ros2 run soa_functions move_to_pose_server --ros-args   -p ns:=right -p move_group:=right_arm -p joint_prefix:=right_ -p base_link_name:=base_link
+ros2 run soa_functions move_to_pose_server --ros-args   -p ns:=right -p move_group:=right_arm -p joint_prefix:=right_ -p base_link_name:=right_base_link
+ros2 run soa_functions gripper_server --ros-args --remap __ns:=/right   -p move_group:=right_gripper -p joint_prefix:=right_
+ros2 run soa_functions gripper_server --ros-args   -p ns:=right -p move_group:=right_gripper -p joint_prefix:=right_
+ros2 run soa_functions gripper_server --ros-args   -p ns:=right -p move_group:=right_gripper -p joint_prefix:=right_ -p base_link_name:=base_link
+ros2 run soa_functions gripper_server --ros-args   -p ns:=right -p move_group:=right_gripper -p joint_prefix:=right_ -p base_link_name:=right_base_link
+ros2 run soa_apps grasp_state_machine --ros-args   -p arm_ns:=right -p hover_done_topic:=/right/hover_done   -p controller_switch_service:=/right/controller_switcher/switch_controller   -p policy_action:=/right_run_policy -p csv_path:=poses_tape.csv
+ros2 run soa_apps state_machine --ros-args   -p hover_done_topic:=/right/hover_done   -p controller_switch_service:=/right/controller_switcher/switch_controller   -p policy_action:=/rosetta_client_right/run_policy   -p csv_path:=poses_tape.csv
+ros2 run soa_apps grasp_state_machine --ros-args   -p hover_done_topic:=/right/hover_done   -p controller_switch_service:=/right/controller_switcher/switch_controller   -p policy_action:=/rosetta_client_right/run_policy   -p csv_path:=poses_tape.csv
+ros2 launch rosetta rosetta_client_launch.py   node_name:=rosetta_client_right   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/bi_soa_left_arm_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right_scissors/checkpoints/100000/pretrained_model   server_address:=127.0.0.1:8080
+ros2 run soa_apps grasp_state_machine --ros-args   -p hover_done_topic:=/right/hover_done   -p controller_switch_service:=/right/controller_switcher/switch_controller   -p policy_action:=/rosetta_client_right/run_policy   -p csv_path:=poses_tape.csv
+ros2 run soa_apps grasp_state_machine --ros-args   -p policy_action:=/rosetta_client_right/run_policy   -p prompt:="grasp object"   -p csv_path:=/home/ubuntu/techin517/poses_scissor.csv   -p arm_ns:=arm2
+ros2 run soa_apps grasp_state_machine --ros-args   -p policy_action:=/rosetta_client_right/run_policy   -p prompt:="grasp object"   -p csv_path:=/home/ubuntu/techin517/poses_scissor.csv   -p arm_ns:=arm2   -p controller_switch_service:=/right/controller_switcher/switch_controller
+ros2 run soa_apps grasp_state_machine --ros-args   -p policy_action:=/rosetta_client_right/run_policy   -p prompt:="grasp object"   -p csv_path:=/home/ubuntu/techin517/poses_scissor.csv   -p arm_ns:=right   -p controller_switch_service:=/right/controller_switcher/switch_controller   -p hover_done_topic:=/right/hover_done
+ros2 run soa_apps hover_to_object scissor --ros-args -p arm_ns:=right
+ros2 launch rosetta rosetta_client_launch.py   node_name:=rosetta_client_left   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/bi_soa_left_arm_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_left_scissors/checkpoints/100000/pretrained_model   server_address:=127.0.0.1:8081
+ros2 action list | grep run_policy
+ros2 launch rosetta rosetta_client_launch.py   node_name:=rosetta_client_right   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/bi_soa_right_arm_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right_scissors/checkpoints/100000/pretrained_model   server_address:=127.0.0.1:8080
+conda deactivate
+ros2 launch rosetta rosetta_client_launch.py   node_name:=rosetta_client_right   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/bi_soa_right_arm_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right_scissors/checkpoints/100000/pretrained_model   server_address:=127.0.0.1:8080
+ros2 launch rosetta rosetta_client_launch.py   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/bi_soa_left_arm_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right_scissors/checkpoints/100000/pretrained_model
+conda deactivate
+ros2 launch rosetta rosetta_client_launch.py   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/bi_soa_left_arm_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right_scissors/checkpoints/100000/pretrained_model
+ros2 launch rosetta rosetta_client_launch.py   node_name:=rosetta_client_left   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/bi_soa_left_arm_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_left_scissors/checkpoints/100000/pretrained_model   server_address:=127.0.0.1:8081
+ros2 launch rosetta rosetta_client_launch.py   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/bi_soa_left_arm_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right_scissors/checkpoints/100000/pretrained_model   server_address:=127.0.0.1:8081
+ros2 launch rosetta rosetta_client_launch.py   node_name:=rosetta_client_right   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/bi_soa_left_arm_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right_scissors/checkpoints/100000/pretrained_model   server_address:=127.0.0.1:8080
+ros2 launch rosetta rosetta_client_launch.py   node_name:=rosetta_client_left   contract_path:=/home/ubuntu/techin517/ros2_ws/src/soa_ros2/soa_bringup/rosetta_contracts/bi_soa_left_arm_contract.yaml   pretrained_name_or_path:=/home/ubuntu/techin517/outputs/train/pick_up_right_scissors/checkpoints/100000/pretrained_model   server_address:=127.0.0.1:8081
+ros2 run soa_apps hover_to_object scissor --ros-args -p arm_ns:=right
+ros2 topic list | grep hover_done
+ros2 run soa_apps hover_to_object scissor --ros-args -p arm_ns:=right
+ros2 service list | grep run_policy
+ros2 run soa_apps hover_to_object scissor --ros-args -p arm_ns:=right
+conda deactivate
+ros2 launch soa_bringup bi_grasp_pipeline.launch.py
+ros2 run soa_functions save_pose
+ros2 service call /follower/save_pose soa_interfaces/srv/SaveJointStates     "{csv_path: '/home/u
+ros2 launch bi_soa_moveit_config bi_soa_moveit_bringup.launch.py cameras:=true

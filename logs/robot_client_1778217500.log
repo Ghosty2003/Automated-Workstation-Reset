@@ -1,7 +1,0 @@
-INFO 2026-05-07 22:18:46 t_client.py:113 Initializing client to connect to server at 127.0.0.1:8080
-INFO 2026-05-07 22:18:46 t_client.py:132 Robot connected and ready
-ERROR 2026-05-07 22:18:46 t_client.py:169 Failed to connect to policy server: <_InactiveRpcError of RPC that terminated with:
-	status = StatusCode.CANCELLED
-	details = "CANCELLED"
-	debug_error_string = "UNKNOWN:Error received from peer  {grpc_status:1, grpc_message:"CANCELLED"}"
->
