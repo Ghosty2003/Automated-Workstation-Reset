@@ -9,7 +9,7 @@ A bimanual SO-101 robotic system that detects loose tools on a makerspace workst
 
 ## Demo
 
-[Video demo (Google Drive)](https://drive.google.com/file/d/1P-MaJwvtjiz7tykhHInCEGyTo5pyPn6b/view?usp=drive_link)
+<video src="[https://github.com/Ghosty2003/Automated-Workstation-Reset/releases/tag/demo/final.demo.mov](https://github.com/Ghosty2003/Automated-Workstation-Reset/releases/download/demo/final.demo.mov)" controls width="700"></video>
 
 Five tool types handled: **screwdriver, plier, tape, pen, scissor**. Two SO-101 arms split the workspace left/right; perception runs YOLOv8m on a RealSense D435 stream; planning combines MoveIt IK with per-arm Rosetta policy clients (ACT-trained) for the grasp; placement is per-tool MoveIt trajectory to the matching rack slot.
 
